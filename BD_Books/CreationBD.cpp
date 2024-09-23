@@ -123,6 +123,48 @@ int main(int argc,char *argv[])
     finish_with_error(connexion);
   }
 
+  //Création de la table employees
+  printf("Création de la table employees...\n");
+  if(mysql_query(connexion, "CREATE TABLE employees("
+                      "employees_id INT(4) AUTO_INCREMENT, "
+                      "login VARCHAR(20), "
+                      "password VARCHAR(20);")) 
+   {
+      finish_with_error(connexion);
+   }
+
+  //Création de la table clients
+  printf("Création de la table clients...\n");
+  if(mysql_query(connexion, "CREATE TABLE clients("
+                      "clients_id INT(4) AUTO_INCREMENT, "
+                      "nom VARCHAR(20), "
+                      "prenom VARCHAR(20)", 
+                      "numeorclient INT(4) AUTO_INCREMENT, "
+                      "adresse VARCHAR(30);"))
+    {
+      finish_with_error(connexion);
+    }
+
+  //Création de la table caddies
+  printf("Création de la table caddies...\n");
+  if(mysql_query(connexion, "CREATE TABLE caddies("
+                      "caddies_id INT(4) AUTO_INCREMENT, "
+                      "date DATE, "
+                      "amount INT(4), "
+                      "payed DECIMAL(10, 2), "
+                      "FOREIGN KEY (clients_id) REFERENCES clients(id);"))
+      {
+          finish_with_error(connexion);
+      }
+
+  //Création de la table caddy_items
+  printf("Création de la table caddy_items...\n");
+  if(mysql_query(connexion, "CREATE TABLE caddy_items("
+                      "caddy_items_id INT(4) AUTO_INCREMENT, "
+                      "quantity INT(4), "
+                      "FOREIGN KEY (caddies_id) REFERENCES caddies(id), "
+                      "FOREIGN KEY (id) REFERENCES books(id);"))
+
   // Ajout de tuples dans la table authors
   printf("Ajout de %d auteurs la table authors...\n",nbAuthors);
   char request[256];
@@ -153,6 +195,50 @@ int main(int argc,char *argv[])
     if (mysql_query(connexion,request)) {
       finish_with_error(connexion);   
     }
+  }
+
+  //Ajout de tuples dans la table employees
+  printf("Ajout de %d employés dans la table employees...\n", nbEmployees);
+  for(int i = 0; i<nbEmployees; i++)
+  {
+      sprintf(request, "INSERT into employees (employees_id, login, password) VALUES (%d, '%s', '%s');", employees[i].id, employees[i].login, employees[i].password);
+      if(mysql_query(connexion, request))
+      {
+          finish_with_error(connexion);
+      }
+  }
+
+  //Ajout de tuples dans la table clients
+  printf("Ajout de %d clients dans la table clients...\n", nbClients);
+  for(int i = 0; i<nbClients; i++)
+  {
+      sprintf(request, "INSERT into clients (clients_id, nom, prenom, numeorclient, adresse) VALUES (%d, '%s', '%s', %d, '%s');", clients[i].id, clients[i].nom, clients[i].prenom, clients[i].numero, clients[i].adresse);
+      if(mysql_query(connexion, request))
+      {
+          finish_with_error(connexion);
+      }
+  }
+
+  //Ajout de tuples dans la table caddies
+  printf("Ajout de %d caddies dans la table caddies...\n", nbCaddies);
+  for(int i = 0; i<nbClients; i++)
+  {
+      sprintf(request, "INSERT into caddies (caddies_id, clients_id, date, amount, payed) VALUES (%d, %d, '%s', %d, %f); ",caddies[i].id, caddies[i].clients_id, caddies[i].date, caddies[i].amount, caddies[i].payed);
+      if(mysql_query(connexion, request))
+      {
+          finish_with_error(connexion);
+      }
+  }
+
+  //Ajout de tuples dans la table caddy_items
+  printf("Ajout de %d caddy_items dans la table caddy_items...\n", nbCaddy_items);
+  for(int i = 0; i<nbClients; i++)
+  {
+      sprintf(request, "INSERT into caddy_items (caddy_items_id, caddies_id, id, quantity) VALUES (%d, %d, %d, %d); ",caddy_items[i].id, caddy_items[i].caddies_id, caddy_items[i].books_id, caddy_items[i].quantity);
+      if(mysql_query(connexion, request))
+      {
+          finish_with_error(connexion);
+      }
   }
 
   // Deconnection de la BD
