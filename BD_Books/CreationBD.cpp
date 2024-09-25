@@ -64,6 +64,30 @@ BOOK books[] = {
 };
 int nbBooks = 13;
 
+EMPLOYEE employees[] = {
+
+
+};
+int nbEmployees;
+
+CLIENT clients[] = {
+
+
+};
+int nbClients;
+
+CAADIES caddies[] = {
+
+
+};
+int nbCaddies;
+
+CADDY_ITEMS caddy_items[] = {
+
+
+};
+int nbCaddy_items;
+
 void finish_with_error(MYSQL *con);
 
 int main(int argc,char *argv[])
